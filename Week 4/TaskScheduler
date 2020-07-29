@@ -1,0 +1,27 @@
+class Solution {
+    public int leastInterval(char[] tasks, int n) {
+        if(n==0)
+            return tasks.length;
+        int[] charCount=new int[26];
+        for(char c:tasks){
+            ++charCount[c-'A'];
+        }
+        
+        //sorting the array to get maximum count at charCount[25];
+        Arrays.sort(charCount);
+        int maxFreqCount = charCount[25]-1;
+        int maxIdleTime = maxFreqCount * n;
+        
+        //now we're replacing the idle intervels with other tasks and finding the min idle time
+        for(int i=24 ; i>=0 ; --i){
+            if(charCount[i]==0)
+                break;
+            maxIdleTime -= Math.min(charCount[i], maxFreqCount);
+        }
+        //if idle time becomes negative it means that all the idle spaces are filled, hence len will be tasks.length only
+        if(maxIdleTime<=0)
+            return tasks.length;
+        else
+            return (tasks.length+maxIdleTime);
+    }
+}
